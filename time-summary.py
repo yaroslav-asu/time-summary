@@ -1,3 +1,4 @@
+import datetime
 import sys
 
 import numpy as np
@@ -12,9 +13,16 @@ def prettify_time(task, time):
         tmp += f" {time % 60}m"
     return tmp
 
+def prettify_ticks_time(time: float):
+    dtime = datetime.time(int(time // 1), int(time % 1 * 60))
+    if dtime.minute == 0:
+        return f"{dtime.hour}h"
+    elif dtime.hour == 0:
+        return f"{dtime.minute}m"
+    else:
+        return f"{dtime.hour}h {dtime.minute}m"
 
 if __name__ == '__main__':
-
     time_cost = int(input("Enter time cost: "))
     inp = sys.stdin.readlines()
     summary = 0
@@ -56,7 +64,16 @@ if __name__ == '__main__':
 
     plt.axhline(y=sum(graph_y) / len(graph_x), color='r')
 
-    plt.yticks(np.arange(0, max(graph_y) + 1, 0.5))
+    plt.ticklabel_format(style='plain')
+
+    fig, ax = plt.subplots()
+    y_ticks = np.arange(0, max(graph_y) + 1, 0.5)
+
+    # vertical ticks and labels
+    ax.set_yticks(y_ticks)
+    ax.set_yticklabels([prettify_ticks_time(tick_time) for tick_time in y_ticks])
+
+    plt.axhline(y=np.nanmean(graph_y), color='r', linestyle='--')
 
     plt.plot(graph_x, graph_y)
 
