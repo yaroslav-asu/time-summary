@@ -5,13 +5,14 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-def prettify_time(task, time):
+def prettify_time(task: str, time: int):
     tmp = task + ':'
     if time >= 60:
         tmp += f" {time // 60}h"
     if time % 60 != 0:
         tmp += f" {time % 60}m"
     return tmp
+
 
 def prettify_ticks_time(time: float):
     dtime = datetime.time(int(time // 1), int(time % 1 * 60))
@@ -21,6 +22,7 @@ def prettify_ticks_time(time: float):
         return f"{dtime.minute}m"
     else:
         return f"{dtime.hour}h {dtime.minute}m"
+
 
 if __name__ == '__main__':
     time_cost = int(input("Enter time cost: "))
@@ -53,7 +55,7 @@ if __name__ == '__main__':
             graph_x.append(line.rstrip().split('.')[0].lstrip())
             graph_y.append(day_summary / 60)
             day_summary = 0
-
+            print('\n' + line, end='')
 
     print()
     print(f"Hours: {summary // 60}, Minutes: {summary % 60}")
@@ -76,6 +78,7 @@ if __name__ == '__main__':
     plt.axhline(y=np.nanmean(graph_y), color='r', linestyle='--')
 
     plt.plot(graph_x, graph_y)
+    plt.xlabel(f"Hours: {summary // 60}, Minutes: {summary % 60}")
 
     plt.grid()
 
